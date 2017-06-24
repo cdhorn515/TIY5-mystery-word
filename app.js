@@ -8,10 +8,12 @@ var expressValidator = require('express-validator');
 var fs = require('fs');
 
 var app = express();
+var context = {};
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -20,11 +22,132 @@ app.use(expressValidator());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'unicorn cats',
+  secret: 'keyboard cats',
   resave: false,
   saveUninitialized: true
 }));
 
+//do we have a user
+// app.use(function(req, res, next){
+//   var pathname = parseurl(req).pathname;
+//   if(!req.body.name && pathname != '/login'){
+//   res.redirect('/login');
+// } else {
+//   res.render('mysteryword');
+//   // next();
+// }
+// });
+var context = {
+  secretWord: ''
+};
+// generate random word
+app.use(function(req,res,next){
+  if(context.secretWord === ''){
+  //***************creating mystery word
+  var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+  maxRandomNumber = Math.floor(words.length - 1);
+  var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
+  var secretWord = words.splice(secretWordIndex, 1);
+  secretWord = secretWord.toString();
+  context.word = secretWord;
+  secretWord = secretWord.split('');
+  context.wordLetters = '';
+  for (var i = 0; i < secretWord.length; i++) {
+    context.wordLetters = "_" + " ";
+  }
+  context.guesses = 8;
+  }
+  res.render('mysteryword', context);
+});
+//if there are no spaces left to guess
+/*
+app.use('/mysteryword', function(req, res, next){
+  if(no spaces left){
+  res.redirect(finished page);
+} else{
+next();
+}
+});
+//checking if there are guesses left
+app.use('/mysteryword', function(req,res,next){
+if(no guesses left){
+res.redirect(sorry try again page)
+}else{
+res.redirect('mystery', #guesses);
+}
+});
+//checking if input was one letter
+app.use('/mysteryword', function(req, res, next) {
+  if(input !one letter){
+  res.redirect(game page, (one letter only)){
+} else{
+  next()
+}
+});
+//looping through mystery word with selected letter
+app.use('/mysteryword', function(req, res, next){
+  for (var i = 0; i < word.length; i++){
+  if word[i] === req.body.input {
+  substitute letter for _ (replace?);
+} else{
+guesses--;
+res.send/render?(sorry that letter is not in this word);
+}
+for both: add letter to letters guessed array displayed on screen
+next();
+}
+});
+
+*/
+app.get('/', function(req,res){
+  res.render('index');
+});
+
+//                                        render login page
+app.get('/login', function(req, res) {
+
+  res.render('login');
+});
+
+app.post('/login', function(req, res){
+  var player = req.body.name;
+
+  if (req.body.name){
+    res.redirect('/mysteryword');
+  } else{
+    res.redirect('/login');
+  }
+});
+
+//redirect from index to login
+app.get('/mysteryword', function(req, res) {
+
+  res.render('mysteryword', context);
+});
+
+
+//                                        redirect to login if no name or
+app.post('/mysteryword', function(req, res) {
+
+  res.render('mysteryword', context);
+});
+
+app.post('/login', function(req, res) {
+  console.log('name entered: ' + req.body.name);
+  req.checkBody('name', 'Please enter your name').notEmpty();
+
+  if (req.body.name) {
+    res.redirect('mysteryword');
+  } else {
+    res.redirect('/login');
+    console.log('please enter your name');
+  }
+});
+
+app.listen(3000, function() {
+  console.log("app launch successful!");
+});
+//put stuff here so code above isn't messy
 // app.use(function(req, res, next) {
 //   var views = req.session.views;
 //   if (!views) {
@@ -44,86 +167,6 @@ app.use(session({
 // next();
 // });
 // console.log(session);
-var context = [{
-  'name': 'Sami'
-}];
-//                                        redirect from index to login
-app.get('/', function(req, res) {
-  res.redirect('/login');
-});
-//                                        render login page
-app.get('/login', function(req, res) {
-
-  res.render('login');
-});
-//                                        redirect to login if no name or
-app.get('/mysteryword', function(req, res) {
-  // if (!req.body.name){
-  //   res.redirect('login');
-  // } else {
-  //
-  // res.render('mysteryword', context);
-// }
-res.redirect('login');
-});
-
-app.post('/login', function(req, res) {
-  var session = req.session;
-  console.log(session);
-  // var userId = req.genid;
-  // console.log(userId);
-  req.checkBody('name', 'Please enter your name').notEmpty();
-
-  var errors = req.validationErrors();
-  var context = {};
-
-  if (errors) {
-    context.errors = errors;
-  }
-  context.name = req.body.name;
-
-  if (req.body.name) {
-      var guesses = 8;
-       context = {
-        players: [{
-          'name': 'Christina',
-          'guesses': function(guess) {
-            guesses = guesses - 1;
-            console.log(guesses);
-            return guesses;
-          },
-          'word': [],
-        }]
-      };
-      // }
-      //***************creating mystery word
-      var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-      maxRandomNumber = Math.floor(words.length - 1);
-      var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
-      //secretWord is an array
-      var secretWord = words.splice(secretWordIndex, 1);
-      console.log('secretword: ' + secretWord);
-      context.players.word = secretWord;
-        var hiddenLetters = "";
-      for (var i = 0; i < secretWord.length; i++) {
-        hiddenLetters += "_";
-        console.log("hiddenLetters: " + hiddenLetters);
-          return hiddenLetters;
-      }
-      context.hiddenWord = hiddenLetters;
-    console.log('context: ' + context);
-
-    res.redirect('/mysteryword');
-  } else {
-    res.redirect('/login');
-    console.log('please enter your name');
-  }
-});
-
-app.listen(3000, function() {
-  console.log("making progress, app launch successful!");
-});
-
 
 
 // check to see if we have a session for name
