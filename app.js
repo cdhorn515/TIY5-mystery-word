@@ -9,6 +9,7 @@ var fs = require('fs');
 
 var app = express();
 var context = {};
+var guesses = 8;
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
@@ -27,40 +28,71 @@ app.use(session({
   saveUninitialized: true
 }));
 
-//do we have a user
+// do we have a user
 app.use(function(req, res, next){
-  var pathname = parseurl(req).pathname;
-  console.log(req.body.name);
-  if(!req.body.name && pathname !== '/login'){
-  res.redirect('/login');
+  req.session.name = req.body.name;
+console.log('name entered: ' + req.session.name);
+req.checkBody('name', 'Please enter your name').notEmpty();
+
+var errors = req.validationErrors();
+
+if (!req.session.name) {
+  console.log('false');
+  res.render('login');
+  console.log('please enter your name');
 } else {
-  // res.redirect('/mysteryword');
+  console.log('true');
+  var context = {
+    'errors': errors,
+    'name': req.session.name,
+    'guesses': req.session.guesses,
+  };
   next();
 }
 });
-var context = {
-  secretWord: ''
-};
-// generate random word
-// app.use(function(req,res,next){
-//   if(context.secretWord === ''){
-//   //***************creating mystery word
-//   var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-//   maxRandomNumber = Math.floor(words.length - 1);
-//   var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
-//   var secretWord = words.splice(secretWordIndex, 1);
-//   secretWord = secretWord.toString();
-//   context.word = secretWord;
-//   console.log(context.word);
-//   secretWord = secretWord.split('');
-//   context.wordLetters = '';
-//   for (var i = 0; i < secretWord.length; i++) {
-//     context.wordLetters = "_" + " ";
-//   }
-//   context.guesses = 8;
-//   }
-//   res.render('mysteryword', context);
-// });
+
+// do we have a random word?
+app.use(function(req,res,next){
+  if(!context.word){
+  //***************creating mystery word and empty spaces
+  var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+  maxRandomNumber = Math.floor(words.length - 1);
+  var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
+  var secretWord = words.splice(secretWordIndex, 1);
+  secretWord = secretWord.toString();
+  secretWord = secretWord.split('');
+  var wordLetters = '';
+  for (var i = 0; i < secretWord.length; i++) {
+     wordLetters += "_ ";
+  }
+  console.log(secretWord);
+  console.log(wordLetters);
+  req.session.word = secretWord;
+  req.session.guesses = 8;
+  req.session.spaces = wordLetters;
+}
+next();
+});
+
+//do we have empty spaces?
+app.use(function(req,res,next){
+  next();
+});
+
+//do we have guesses left?
+app.use(function(req,res,next){
+ if(req.session.guesses > 0) {
+ context = {
+   name: req.session.name,
+   guesses: req.session.guesses,
+   word: req.session.word,
+   wordLetters: req.session.spaces
+ };
+}
+res.render('mysteryword', context);
+//next();
+});
+
 //if there are no spaces left to guess
 /*
 app.use('/mysteryword', function(req, res, next){
@@ -70,7 +102,7 @@ app.use('/mysteryword', function(req, res, next){
 next();
 }
 });
-//checking if there are guesses left
+//Do we have guesses?
 app.use('/mysteryword', function(req,res,next){
 if(no guesses left){
 res.redirect(sorry try again page)
@@ -78,7 +110,8 @@ res.redirect(sorry try again page)
 res.redirect('mystery', #guesses);
 }
 });
-//checking if input was one letter
+
+//Is the guess only one letter?
 app.use('/mysteryword', function(req, res, next) {
   if(input !one letter){
   res.redirect(game page, (one letter only)){
@@ -86,7 +119,8 @@ app.use('/mysteryword', function(req, res, next) {
   next()
 }
 });
-//looping through mystery word with selected letter
+
+//Does the letter match letter in mystery word?
 app.use('/mysteryword', function(req, res, next){
   for (var i = 0; i < word.length; i++){
   if word[i] === req.body.input {
@@ -103,25 +137,6 @@ next();
 */
 
 
-// app.post('/login/', function(req, res){
-//   console.log(req.body.name);
-//   context.name = req.body.name;
-//   if (req.session.name === 'Christina'){
-//     res.render('mysteryword', context);
-//   } else {
-//     res.redirect('/login');
-//   }
-// });
-  // var name = req.params.name;
-  //
-  // if (name !== undefined){
-  //   res.redirect('/mysteryword');
-  // } else{
-  //   res.redirect('/login');
-// }
-// res.send({'user': req.body.name});
-// });
-
 app.get('/', function(req,res){
   res.redirect('login');
 });
@@ -129,16 +144,17 @@ app.get('/', function(req,res){
 //                                        render login page
 app.get('/login', function(req, res) {
 
-  res.render('login');
+  res.render('login', context);
 });
 
-//redirect from index to login
+// redirect from index to login
 app.get('/mysteryword', function(req, res) {
-  // if(!context.name){
-  //   res.redirect('/login');
-  // } else{
 
-  res.render('mysteryword', context);
+  console.log('mystery page' + context.name);
+//   if(!context.name){
+//     res.redirect('/login');
+// }
+  res.redirect('/login');
 });
 
 
@@ -149,28 +165,35 @@ app.post('/mysteryword', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-  console.log('name entered: ' + req.body.name);
-  // req.checkBody('name', 'Please enter your name').notEmpty();
-
-  if (req.body.name) {
-
-    console.log('true');
-    var context = {
-      'name': req.body.name,
-      'guesses': 8
-    };
-    res.render('mysteryword', context);
-  } else {
-    console.log('false');
-    res.redirect('/login');
-    console.log('please enter your name');
-  }
+  // req.session.name = req.body.name;
+res.render('login', context);
 });
 
 app.listen(3000, function() {
   console.log("app launch successful!");
 });
 //put stuff here so code above isn't messy
+//   console.log('name entered: ' + req.body.name);
+//   req.checkBody('name', 'Please enter your name').notEmpty();
+//
+// var errors = req.validationErrors();
+//
+//   if (req.body.name) {
+//
+//     console.log('true');
+//     var context = {
+//       'errors': errors,
+//       'name': req.body.name,
+//       'guesses': 8,
+//       'secretWord': ''
+//     };
+//     res.render('mysteryword', context);
+//   } else {
+//     console.log('false');
+//     res.redirect('/login');
+//     console.log('please enter your name');
+//   }
+
 // app.use(function(req, res, next) {
 //   var views = req.session.views;
 //   if (!views) {
