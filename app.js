@@ -7,11 +7,21 @@ var parseurl = require('parseurl');
 var expressValidator = require('express-validator');
 var fs = require('fs');
 var mysteryWordController = require('./controllers/mysteryWord');
-
+var loginController = require('./controllers/login');
 
 var app = express();
-var context = {};
 
+// var context = {
+//   name: ''
+//   ,guessesLeft: 0
+//   ,secretWord: ''
+//   ,wordBlanks: []
+//   ,lengthOfWord: 0
+//   ,guessedLetters: []
+//   ,wordLetters: ''
+//   ,guess: ''
+//   ,errors: ''
+// };
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
@@ -29,7 +39,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
+/////----------MIDDLEWARE---------
 //do we have a user--
 app.use(function(req, res, next) {
   // req.session.name = req.body.name;
@@ -57,8 +67,9 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
   if (!req.session.word) {
     console.log('59: no session.word');
-    var guesses = 8;
-    req.session.guesses = guesses;
+    // var guesses = 8;
+    req.session.guessesLeft = 8;
+    req.session.guessedLetters = [];
     //***************creating mystery word and empty spaces
     var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
     maxRandomNumber = Math.floor(words.length - 1);
@@ -71,7 +82,7 @@ app.use(function(req, res, next) {
     // console.log('type of secretword: ' + typeof(secretWord)); object--array
     //length of word to eventually be stored in context obj, every time guess a letter correct subtract one
     req.session.lengthOfWord = secretWord.length;
-    var wordBlanks = '';
+    var wordBlanks = [];
     for (var i = 0; i < secretWord.length; i++) {
       wordBlanks += "_ ";
     }
@@ -86,7 +97,7 @@ app.use(function(req, res, next) {
   }
   next();
 });
-
+/////----------ENDPOINTS
 
 app.get('/mysteryWord', mysteryWordController.landing);
 
@@ -94,7 +105,7 @@ app.post('/mysteryWord', mysteryWordController.play);
 
 //render login page
 app.get('/login', function(req, res) {
-
+var context = {};
   res.render('login', context);
 });
 

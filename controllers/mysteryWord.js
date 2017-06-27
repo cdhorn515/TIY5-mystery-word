@@ -1,28 +1,27 @@
+
+
 module.exports = {
+
   landing: function(req, res) {
     var context = {
       name: req.session.name,
-      guessesLeft: req.session.guesses,
+      guessesLeft: req.session.guessesLeft,
       secretWord: req.session.secretWord,
       wordBlanks: req.session.wordBlanks,
       lengthOfWord: req.session.lengthOfWord,
-      // guessedLetter: req.session.guess
+      guessedLetter: req.session.guess
     };
     res.render('mysteryWord', context);
   },
   play: function(req, res) {
     req.session.guess = req.body.guess;
     var context = {
-      name: req.session.name
-      ,guessesLeft: req.session.guesses
-      ,secretWord: req.session.secretWord
-      ,wordBlanks: req.session.wordBlanks
-      ,lengthOfWord: req.session.lengthOfWord
-      ,displayGuessedLetters: []
-      ,wordLetters: ''
-      ,guess: ''
-      ,errors: ' '
-    };
+      name: req.session.name,
+      guessesLeft: req.session.guessesLeft,
+      secretWord: req.session.secretWord,
+      wordBlanks: req.session.wordBlanks,
+      lengthOfWord: req.session.lengthOfWord,
+     };
     //do we have empty spaces?
     for (var i = 0; i < req.session.word; i++) {
       if (wordLetters[i] === '_ ') {
@@ -36,49 +35,51 @@ module.exports = {
     }
     //do we have guesses left?
     // app.use(function(req, res, next) {
-    if (context.guessesLeft > 0) {
-      console.log("line 38 guesses left: " + context.guessesLeft);
+    if (req.session.guessesLeft > 0) {
+      console.log("line 38 guesses left: " + req.session.guessesLeft);
     } else {
-      if (context.guessesLeft === 0) {
-        console.log('no guesses left ' + context.guessesLeft);
+      if (req.session.guessesLeft === 0) {
+        console.log('no guesses left ' + req.session.guessesLeft);
       }
     }
     //do we have a guess?
     //check if guess is one letter
   //  FIXME:
-    req.checkBody('guess', 'what kind of word are you trying to spell?').isAlpha();
-    req.checkBody('guess', 'one letter at a time please').isLength({
-      min:1, max: 1
-    });
-    req.checkBody('guess', 'if you don\'t enter a letter you can\'t play the game').isEmpty();
-    var errors = req.validationErrors();
-    if (errors) {
-      context.errors = errors;
-      console.log(context.errors);
-      res.render('mysteryWord', context);
-    } else {
-      req.body.guess = req.session.guess;
+    // req.checkBody('guess', 'what kind of word are you trying to spell?').isAlpha();
+    // req.checkBody('guess', 'one letter at a time please').isLength({
+    //   min:1, max: 1
+    // });
+    // req.checkBody('guess', 'if you don\'t enter a letter you can\'t play the game').isEmpty();
+    // var errors = req.validationErrors();
+    // if (errors) {
+    //   context.errors = errors;
+    //   console.log(context.errors);
+    //   res.render('mysteryWord', context);
+    // } else {
+      req.session.guess = req.body.guess;
+      // console.log('60 ' + req.session.guess);
       context.guess = req.session.guess;
-      context.displayGuessedLetters += req.session.guess;
-      console.log(context.guess);
-      console.log(context.displayGuessedLetters);
-      var guessesLeft = req.session.guesses;
-      // req.session.guess.toLowerCase();
-      //  displayLetters = req.session.guess;
+      req.session.guessedLetters.push(req.body.guess);
+      context.guessedLetters = req.session.guessedLetters;
+      
       for (i = 0; i < req.session.word.length; i++) {
         if (req.session.guess === req.session.secretWord[i]) {
+          // console.log('line 73 ' + req.session.secretWord[i]);
           context.wordBlanks[i] = req.session.guess;
-          context.lengthOfWord--;
-          console.log('60: ' + context.lengthOfWord);
+          // console.log('line 76 ' + context.wordBlanks[i]);
+          // console.log('77: ' + context.lengthOfWord);
         } else {
-          context.guessesLeft--;
-          console.log('63 guesses left: ' + context.guessesLeft);
+          context.lengthOfWord--;
         }
       }
+          // context.guessesLeft--;
+          console.log('77 guesses left: ' + context.guessesLeft);
+
+
       res.render('mysteryWord', context);
     }
 //end of play key
-  }
+  // }
 
 
 
