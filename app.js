@@ -82,10 +82,12 @@ app.use(function(req, res, next) {
     // console.log('type of secretword: ' + typeof(secretWord)); object--array
     //length of word to eventually be stored in context obj, every time guess a letter correct subtract one
     req.session.lengthOfWord = secretWord.length;
-    var wordBlanks = [];
-    for (var i = 0; i < secretWord.length; i++) {
-      wordBlanks += "_ ";
-    }
+
+    //es6 array fill syntax
+    var wordBlanks = Array(secretWord.length).fill('_');
+    // for (var i = 0; i < secretWord.length; i++) {
+    //   wordBlanks += "_ ";
+    // }
     //shows word in array, individual letters
     console.log(secretWord);
     // console.log('type of wordLetters: ' + typeof(wordLetters)); string
