@@ -26,12 +26,12 @@
   {{#guessesLeft}}
     <h4>You have {{guessesLeft}} guesses left, please type a letter below and click on the guess button!</h4>{{/guessesLeft}}
 
-<h4>{{context.duplicateLetterMessage}}</h4>
+<h4>{{duplicateLetterMessage}}</h4>
 
   <ul>
-    {{#context.errors}}
+    {{#errors}}
       <li>{{param}}: {{msg}}</li>
-    {{/context.errors}}
+    {{/errors}}
   </ul>
 
   {{^guessesLeft}}

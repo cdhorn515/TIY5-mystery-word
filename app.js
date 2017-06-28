@@ -42,10 +42,6 @@ app.use(session({
 /////----------MIDDLEWARE---------
 //do we have a user--
 app.use(function(req, res, next) {
-  // req.session.name = req.body.name;
-  // req.session.guessesLeft = numberOfGuesses;
-  // console.log('35 name entered: ' + req.session.name);
-  // req.session.guesses = 8;
   var pathname = parseurl(req).pathname;
   if (!req.session.name && pathname != '/login') {
     console.log('false');
@@ -53,12 +49,6 @@ app.use(function(req, res, next) {
     res.redirect('login');
   } else {
     console.log('true');
-    // var context = {
-    //   // 'errors': errors,
-    //   'name': req.session.name,
-    //   'guessesLeft': req.session.guesses,
-    // };
-    //res.render('mysteryWord', context);
     next();
   }
 });
@@ -71,12 +61,16 @@ app.use(function(req, res, next) {
     req.session.guessesLeft = 8;
     req.session.guessedLetters = [];
     //***************creating mystery word and empty spaces
-    var words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+    var allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+    console.log('65', allWords.length);
+    var words = allWords.filter(function(word){
+      return word.length > 3 && word.length < 10;
+    });
+    console.log('69', words.length);
     maxRandomNumber = Math.floor(words.length - 1);
     var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
     var secretWord = words.splice(secretWordIndex, 1);
     secretWord = secretWord.toString();
-    // console.log('type of secretword: ' + typeof(secretWord)); string
     req.session.word = secretWord;
     secretWord = secretWord.split('');
     // console.log('type of secretword: ' + typeof(secretWord)); object--array
@@ -117,7 +111,7 @@ app.post('/login', function(req, res) {
   var context = {};
 
   if(!req.body.name){
-    console.log('line 226: please enter your name');
+    // console.log('line 114: please enter your name');
 }
   if(errors){
      context = {
