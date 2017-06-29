@@ -52,15 +52,13 @@ app.use(function(req, res, next) {
     next();
   }
 });
-
 // do we have a random word?
 app.use(function(req, res, next) {
   if (!req.session.word) {
     console.log('59: no session.word');
-    // var guesses = 8;
     req.session.guessesLeft = 8;
     req.session.guessedLetters = [];
-    //***************creating mystery word and empty spaces
+    //***************creating mystery word
     var allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
     console.log('65', allWords.length);
     var words = allWords.filter(function(word){
@@ -73,25 +71,13 @@ app.use(function(req, res, next) {
     secretWord = secretWord.toString();
     req.session.word = secretWord;
     console.log('75 ', req.session.word);
+    //split word into array then create blanks to rep letters
     secretWord = secretWord.split('');
-    // console.log('type of secretword: ' + typeof(secretWord)); object--array
-    //length of word to eventually be stored in context obj, every time guess a letter correct subtract one
     req.session.lengthOfWord = secretWord.length;
-
     //es6 array fill syntax
     var wordBlanks = Array(secretWord.length).fill('_');
-    // for (var i = 0; i < secretWord.length; i++) {
-    //   wordBlanks += "_ ";
-    // }
-    //shows word in array, individual letters
-    console.log(secretWord);
-    // console.log('type of wordLetters: ' + typeof(wordLetters)); string
-    //shows _ for each letter in word
-    console.log(wordBlanks);
     req.session.secretWord = secretWord;
     req.session.wordBlanks = wordBlanks;
-    console.log('93 ',req.session.word);
-    // console.log('76 ' + req.sessions.guesses);
   }
   next();
 });
@@ -113,7 +99,7 @@ app.post('/login', function(req, res) {
   var context = {};
 
   if(!req.body.name){
-    console.log('line 226: please enter your name');
+    console.log('line 116: please enter your name');
 }
   if(errors){
      context = {
@@ -133,21 +119,12 @@ app.get('/playAgain', function(req, res){
 });
 
 app.post('/end', function(req,res){
-  context.endGame = 'Thanks  for playing ' + req.session.name + '! Hope you\'ll come back and play again soon!';
-  res.render('/', context);
-});
-//
-// app.get('/mysteryWord', function(req, res) {
-//
-//   context = {
-//     name: req.session.name,
-//     guessesLeft: req.session.guesses,
-//     secretWord: req.session.secretWord,
-//     wordBlanks: req.session.wordBlanks
-//   };
-//   res.render('mysteryWord', context);
-// });
 
+  var context = {
+  endGame: 'Thanks  for playing ' + req.session.name + '! Hope you\'ll come back and play again soon!'
+  };
+  res.render('index', context);
+});
 app.listen(3000, function() {
   console.log("app launch successful!");
 });
