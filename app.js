@@ -111,7 +111,7 @@ app.post('/login', function(req, res) {
   var context = {};
 
   if(!req.body.name){
-    // console.log('line 114: please enter your name');
+    console.log('line 226: please enter your name');
 }
   if(errors){
      context = {
