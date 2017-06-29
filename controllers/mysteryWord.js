@@ -113,9 +113,8 @@ module.exports = {
       // }
       // }
       //loop through and check guessed letter against letters in word
-req.session.lettersCorrect = 0;
+      req.session.lettersCorrect = 0;
       for (var i = 0; i < req.session.word.length; i++) {
-
         if (req.session.guess === req.session.secretWord[i]) {
           //this is working, displays letters in place of blanks
           req.session.wordBlanks[i] = req.session.guess;
@@ -123,19 +122,16 @@ req.session.lettersCorrect = 0;
           //remove one from the length of the word, when it's 0 the word is guessed
           //this is working, lengthOfWord goes to 0 as correct guesses are made
           req.session.lengthOfWord--;
-          // return lettersCorrect;
-          // req.session.lengthOfWord--;
-          // req.session.guessesLeft++;
-          // if (req.session.guessesLeft > 8) {
-          //   req.session.guessesLeft = 8;
-          //   context.guessesLeft = req.session.guessesLeft;
+          if (req.session.lengthOfWord === 0) {
+            context.gameOver = 'Congratulations, you guessed the secret word!';
+            res.render('mysteryWord', context);
+            return;
+          }
+          // console.log("here ", lettersCorrect);
         }
-        // console.log("here ", lettersCorrect);
-        }
-        if (req.session.lettersCorrect === 0) {
-          req.session.guessesLeft--;
-
-        // console.log('here', lettersCorrect);
+      }
+      if (req.session.lettersCorrect === 0) {
+        req.session.guessesLeft--;
       }
       context.guessesLeft = req.session.guessesLeft;
 
@@ -146,7 +142,7 @@ req.session.lettersCorrect = 0;
     res.render('mysteryWord', context);
 
     // context.guessesLeft--;
-// if (errors)
+    // if (errors)
     //     console.log('130 guesses left: ' + context.guessesLeft);
     //
     // }
