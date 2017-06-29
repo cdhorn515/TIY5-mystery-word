@@ -90,6 +90,8 @@ app.post('/mysteryWord', mysteryWordController.play);
 //render login page
 app.get('/login', function(req, res) {
 var context = {};
+req.session.name = '';
+req.session.word = '';
   res.render('login', context);
 });
 
@@ -99,7 +101,7 @@ app.post('/login', function(req, res) {
   var context = {};
 
   if(!req.body.name){
-    console.log('line 116: please enter your name');
+    console.log('line 102: please enter your name');
 }
   if(errors){
      context = {
