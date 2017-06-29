@@ -15,7 +15,7 @@ module.exports = {
     var context = {
       name: req.session.name,
       guessesLeft: req.session.guessesLeft,
-      secretWord: req.session.secretWord,
+      secretWord: req.session.word,
       wordBlanks: req.session.wordBlanks,
       lengthOfWord: req.session.lengthOfWord,
       guessedLetters: req.session.guessedLetters

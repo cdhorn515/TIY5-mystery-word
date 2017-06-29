@@ -72,6 +72,7 @@ app.use(function(req, res, next) {
     var secretWord = words.splice(secretWordIndex, 1);
     secretWord = secretWord.toString();
     req.session.word = secretWord;
+    console.log('75 ', req.session.word);
     secretWord = secretWord.split('');
     // console.log('type of secretword: ' + typeof(secretWord)); object--array
     //length of word to eventually be stored in context obj, every time guess a letter correct subtract one
@@ -89,6 +90,7 @@ app.use(function(req, res, next) {
     console.log(wordBlanks);
     req.session.secretWord = secretWord;
     req.session.wordBlanks = wordBlanks;
+    console.log('93 ',req.session.word);
     // console.log('76 ' + req.sessions.guesses);
   }
   next();
@@ -123,6 +125,16 @@ app.post('/login', function(req, res) {
 
   res.redirect('mysteryWord');
 }
+});
+
+app.get('/playAgain', function(req, res){
+  req.session.word = '';
+  res.redirect('mysteryWord');
+});
+
+app.post('/end', function(req,res){
+  context.endGame = 'Thanks  for playing ' + req.session.name + '! Hope you\'ll come back and play again soon!';
+  res.render('/', context);
 });
 //
 // app.get('/mysteryWord', function(req, res) {

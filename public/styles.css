@@ -1,4 +1,12 @@
 body{
   background-color: orange;
-  padding-top: 100px;
+  padding-top: 50px;
+}
+
+li{
+  list-style: none;
+}
+
+.newWord{
+  float: left;
 }
