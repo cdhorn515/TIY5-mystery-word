@@ -28,8 +28,11 @@
     <li><span>{{guessedLetters}} </span></li>
   </ul>
 
+<!-- FIXME so that it doesn't show if word is guessed -->
+{{#lengthOfWord}}
   {{#guessesLeft}}
     <h4>You have {{guessesLeft}} guesses left, please type a letter below and click on the guess button!</h4>{{/guessesLeft}}
+{{/lengthOfWord}}
 
   <h4>{{duplicateLetterMessage}}</h4>
 
