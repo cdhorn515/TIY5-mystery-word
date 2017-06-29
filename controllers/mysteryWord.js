@@ -21,7 +21,8 @@ module.exports = {
       guessedLetters: req.session.guessedLetters
     };
     req.session.guess = req.body.guess;
-    if (!req.body.guess) {
+    if (req.body.guess === '') {
+      console.log('no guess');
       context.error = "If you want to play the game, you have to enter a letter";
       res.render('mysteryWord', context);
       return;
@@ -38,7 +39,6 @@ module.exports = {
       if (!errors) {
         req.session.guess = req.body.guess;
         context.guess = req.session.guess;
-        // console.log('here', req.session.guessedLetters.length);
         //check for duplicate letters
         if (req.session.guessedLetters.length > 0) {
           for (var i = 0; i < req.session.guessedLetters.length; i++) {
@@ -49,13 +49,9 @@ module.exports = {
             }
           }
         }
-
         //push guessed letter into array to display on screen
         req.session.guessedLetters.push(req.body.guess);
         context.guessedLetters = req.session.guessedLetters;
-        // req.session.guessesLeft--;
-        // }
-        // }
         //loop through and check guessed letter against letters in word
         req.session.lettersCorrect = 0;
         for (var i = 0; i < req.session.word.length; i++) {
@@ -84,79 +80,81 @@ module.exports = {
             return;
           }
         }
+
         context.guessesLeft = req.session.guessesLeft;
 
       } else {
         context.errors = errors;
       }
     }
+    // }
     res.render('mysteryWord', context);
-
-    // context.guessesLeft--;
-    // if (errors)
-    //     console.log('130 guesses left: ' + context.guessesLeft);
-    //
-    // }
-
-    // }
-    // }
-    //end of play key
-    // }
-
-
-    //if there are no spaces left to guess
-    /*
-    app.use('/mysteryword', function(req, res, next){
-      if(no spaces left){
-      res.redirect(finished page);
-    } else{
-    next();
-    }
-    });
-    //Do we have guesses?
-    app.use('/mysteryword', function(req,res,next){
-    if(no guesses left){
-    res.redirect(sorry try again page)
-    }else{
-    res.redirect('mystery', #guesses);
-    }
-    });
-
-    //Is the guess only one letter?
-    app.use('/mysteryword', function(req, res, next) {
-    req.checkBody('guess', 'enter one letter per guess please').notEmpty().isAlpha().isLength({max: 1});
-    var guessedLetter = req.body.guess;
-    guessedLetter.toLowerCase();
-    req.session.guess = guessedLetter;
-    context = {
-      name: req.session.name,
-      guessesLeft: req.session.guessesLeft,
-      word: req.session.word,
-      wordLetters: req.session.spaces,
-      guessedLetters: req.session.guess
-    };
-      if(input !one letter){
-      res.redirect(game page, (one letter only)){
-    } else{
-
-    }
-    });
-
-    //Does the letter match letter in mystery word?
-    app.use('/mysteryword', function(req, res, next){
-      for (var i = 0; i < word.length; i++){
-      if word[i] === req.body.input {
-      substitute letter for _ (replace?);
-    } else{
-    guesses--;
-    res.send/render?(sorry that letter is not in this word);
-    }
-    for both: add letter to letters guessed array displayed on screen
-
-    }
-    });
-
-    */
 
   }
 };
+
+// context.guessesLeft--;
+// if (errors)
+//     console.log('130 guesses left: ' + context.guessesLeft);
+//
+// }
+
+// }
+// }
+//end of play key
+// }
+
+
+//if there are no spaces left to guess
+/*
+app.use('/mysteryword', function(req, res, next){
+  if(no spaces left){
+  res.redirect(finished page);
+} else{
+next();
+}
+});
+//Do we have guesses?
+app.use('/mysteryword', function(req,res,next){
+if(no guesses left){
+res.redirect(sorry try again page)
+}else{
+res.redirect('mystery', #guesses);
+}
+});
+
+//Is the guess only one letter?
+app.use('/mysteryword', function(req, res, next) {
+req.checkBody('guess', 'enter one letter per guess please').notEmpty().isAlpha().isLength({max: 1});
+var guessedLetter = req.body.guess;
+guessedLetter.toLowerCase();
+req.session.guess = guessedLetter;
+context = {
+  name: req.session.name,
+  guessesLeft: req.session.guessesLeft,
+  word: req.session.word,
+  wordLetters: req.session.spaces,
+  guessedLetters: req.session.guess
+};
+  if(input !one letter){
+  res.redirect(game page, (one letter only)){
+} else{
+
+}
+});
+
+//Does the letter match letter in mystery word?
+app.use('/mysteryword', function(req, res, next){
+  for (var i = 0; i < word.length; i++){
+  if word[i] === req.body.input {
+  substitute letter for _ (replace?);
+} else{
+guesses--;
+res.send/render?(sorry that letter is not in this word);
+}
+for both: add letter to letters guessed array displayed on screen
+
+}
+});
+
+*/
