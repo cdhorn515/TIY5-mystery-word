@@ -10,58 +10,63 @@
 <body>
   <h1 class="welcome">Welcome to Mystery Word {{name}}!</h1>
 
-<img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
+  <img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
 
-<div class="guessSection">
+  <div class="guessSection">
 
-  <!--only shows if there are guesses left  -->
-  {{#guessesLeft}}
-    <h3>Your mystery word is:
+    <!--only shows if there are guesses left  -->
+    {{#guessesLeft}}
+      <h3>Your mystery word is:
     {{#wordBlanks}}
     {{.}}
     {{/wordBlanks}}
   </h3>
-  {{/guessesLeft}}
+    {{/guessesLeft}}
 
-  <!--If no guesses left, this shows instead  -->
-  {{^guessesLeft}}
-  <h4>Sorry, you are out of guesses, the mystery word was {{secretWord}}</h4>{{/guessesLeft}}
+    <!--If no guesses left, this shows instead  -->
+    {{^guessesLeft}}
+    <h4>Sorry, you are out of guesses, the mystery word was {{secretWord}}</h4>{{/guessesLeft}}
 
-  <h4>Letters guessed: </h4>
-  <ul>
-    <li class="guessedLetters"><span>{{guessedLetters}} </span></li>
-  </ul>
+    <h4>Letters guessed: </h4>
+    <ul>
+      <li class="guessedLetters"><span>{{guessedLetters}} </span></li>
+    </ul>
 
-{{#lengthOfWord}}
-  {{#guessesLeft}}
-    <h4>You have {{guessesLeft}} guesses left, please type a letter below and click on the guess button!</h4>{{/guessesLeft}}
-{{/lengthOfWord}}
+    {{#lengthOfWord}}
+      {{#guessesLeft}}
+        <h4>You have {{guessesLeft}} guesses left, please type a letter below and click on the guess button!</h4>
+      {{/guessesLeft}}
+    {{/lengthOfWord}}
 
-  <h4>{{duplicateLetterMessage}}</h4>
+    <h4>{{duplicateLetterMessage}}</h4>
 
-  <ul>
-    {{#errors}}
-      <li>{{msg}}</li>
-    {{/errors}}
-    {{#error}}
-      <li>{{error}}</li>
-    {{/error}}
-  </ul>
+    <ul>
+      {{#errors}}
+        <li>{{msg}}</li>
+      {{/errors}}
+      {{#error}}
+        <li>{{error}}</li>
+      {{/error}}
+    </ul>
 
-  <h2>{{gameOver}}</h2>
+    <h2>{{gameOver}}</h2>
 
-  <form class="letter" action="/mysteryWord" method="post">
-    <input type="text" name="guess" value="">
-    <input type="submit" name="button" value="Guess">
-  </form>
-  <!-- only show if game is over -->
+    {{#lengthOfWord}}
+      {{#guessesLeft}}
+        <form class="letter" action="/mysteryWord" method="post">
+          <input type="text" name="guess" value="">
+          <input type="submit" name="button" value="Guess">
+        </form>
+      {{/guessesLeft}}
+    {{/lengthOfWord}}
+    <!-- only show if game is over -->
   </div>
-{{#gameOver}}
-  <form class="newWord" action="/playAgain" method="get">
+  {{#gameOver}}
+    <form class="newWord" action="/playAgain" method="get">
 
-    Play again?<input type="submit" name="button" value="Yes">
-  </form>
-  <span><form class="noNewWord" action="/end" method="post">
+      Play again? <input type="submit" name="button" value="Yes">
+    </form>
+    <span><form class="noNewWord" action="/end" method="post">
       <input type="submit" name="button" value="No">
     </form>
     {{/gameOver}}

@@ -8,6 +8,7 @@ var expressValidator = require('express-validator');
 var fs = require('fs');
 var mysteryWordController = require('./controllers/mysteryWord');
 var loginController = require('./controllers/login');
+var indexController = require('./controllers/index');
 
 var app = express();
 
@@ -69,46 +70,14 @@ app.get('/mysteryWord', mysteryWordController.landing);
 
 app.post('/mysteryWord', mysteryWordController.play);
 
-//render login page
-app.get('/login', function(req, res) {
-var context = {};
-req.session.name = '';
-req.session.word = '';
-  res.render('login', context);
-});
+app.get('/login', loginController.landing);
 
-app.post('/login', function(req, res) {
-  req.checkBody('name', 'Please enter your name').notEmpty();
-  var errors = req.validationErrors();
-  var context = {};
+app.post('/login', loginController.checkForName); 
 
-  if(!req.body.name){
-    console.log('line 102: please enter your name');
-}
-  if(errors){
-     context = {
-      errors: errors
-    };
-    res.render('login', context);
-  } else if (req.body.name){
-  req.session.name = req.body.name;
+app.get('/playAgain', mysteryWordController.replay);
 
-  res.redirect('mysteryWord');
-}
-});
+app.post('/end', indexController.goodbyeMsg);
 
-app.get('/playAgain', function(req, res){
-  req.session.word = '';
-  res.redirect('mysteryWord');
-});
-
-app.post('/end', function(req,res){
-
-  var context = {
-  endGame: 'Thanks  for playing ' + req.session.name + '! Hope you\'ll come back and play again soon!'
-  };
-  res.render('index', context);
-});
 app.listen(3000, function() {
   console.log("app launch successful!");
 });

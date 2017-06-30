@@ -82,5 +82,9 @@ module.exports = {
       }
     }
     res.render('mysteryWord', context);
+  },
+  replay: function(req, res){
+    req.session.word = '';
+    res.redirect('mysteryWord');
   }
 };
