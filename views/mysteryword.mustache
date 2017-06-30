@@ -9,8 +9,19 @@
 
 <body>
   <h1 class="welcome">Welcome to Mystery Word {{name}}!</h1>
-
+  {{#lengthOfWord}}
+    {{#guessesLeft}}
   <img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
+  {{/guessesLeft}}
+{{/lengthOfWord}}
+
+{{#gameOverWin}}
+  <img class="picture" src="../static/images/snoopycongrats.jpg" alt="snoopy_happy_dance">
+{{/gameOverWin}}
+
+{{#gameOverLose}}
+  <img class="picture" src="../static/images/charliebrownlose.jpg" alt="charlie_brown_lose">
+{{/gameOverLose}}
 
   <div class="guessSection">
 
@@ -49,7 +60,9 @@
       {{/error}}
     </ul>
 
-    <h2>{{gameOver}}</h2>
+    <h2>{{gameOverWin}}</h2>
+
+      <h2>{{gameOverLose}}</h2>
 
     {{#lengthOfWord}}
       {{#guessesLeft}}

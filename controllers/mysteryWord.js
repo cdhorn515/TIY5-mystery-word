@@ -7,7 +7,8 @@ module.exports = {
       secretWord: req.session.secretWord,
       wordBlanks: req.session.wordBlanks,
       lengthOfWord: req.session.lengthOfWord,
-      guessedLetter: req.session.guess
+      guessedLetter: req.session.guess,
+
     };
     res.render('mysteryWord', context);
   },
@@ -18,7 +19,7 @@ module.exports = {
       secretWord: req.session.word,
       wordBlanks: req.session.wordBlanks,
       lengthOfWord: req.session.lengthOfWord,
-      guessedLetters: req.session.guessedLetters
+      guessedLetters: req.session.guessedLetters,
     };
 
     if (req.body.guess === '') {
@@ -61,7 +62,7 @@ module.exports = {
             req.session.lengthOfWord--;
             context.lengthOfWord = req.session.lengthOfWord;
             if (req.session.lengthOfWord === 0) {
-              context.gameOver = 'Congratulations, you guessed the secret word!';
+              context.gameOverWin = 'Congratulations, you guessed the secret word!';
               res.render('mysteryWord', context);
               return;
             }
@@ -71,7 +72,7 @@ module.exports = {
           req.session.guessesLeft--;
           if (req.session.guessesLeft === 0) {
             context.guessesLeft = 0;
-            context.gameOver = "Better luck next time!";
+            context.gameOverLose = "Better luck next time!";
             res.render('mysteryWord', context);
             return;
           }
