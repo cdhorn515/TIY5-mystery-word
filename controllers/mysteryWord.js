@@ -20,6 +20,7 @@ module.exports = {
       wordBlanks: req.session.wordBlanks,
       lengthOfWord: req.session.lengthOfWord,
       guessedLetters: req.session.guessedLetters,
+      gameOver: false
     };
 
     if (req.body.guess === '') {
@@ -63,6 +64,7 @@ module.exports = {
             context.lengthOfWord = req.session.lengthOfWord;
             if (req.session.lengthOfWord === 0) {
               context.gameOverWin = 'Congratulations, you guessed the secret word!';
+              context.gameOver = true;
               res.render('mysteryWord', context);
               return;
             }
@@ -73,6 +75,7 @@ module.exports = {
           if (req.session.guessesLeft === 0) {
             context.guessesLeft = 0;
             context.gameOverLose = "Better luck next time!";
+            context.gameOver = true;
             res.render('mysteryWord', context);
             return;
           }

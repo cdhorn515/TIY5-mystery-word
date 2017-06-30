@@ -11,17 +11,17 @@
   <h1 class="welcome">Welcome to Mystery Word {{name}}!</h1>
   {{#lengthOfWord}}
     {{#guessesLeft}}
-  <img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
-  {{/guessesLeft}}
-{{/lengthOfWord}}
+      <img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
+    {{/guessesLeft}}
+  {{/lengthOfWord}}
 
-{{#gameOverWin}}
-  <img class="picture" src="../static/images/snoopycongrats.jpg" alt="snoopy_happy_dance">
-{{/gameOverWin}}
+  {{#gameOverWin}}
+    <img class="picture" src="../static/images/snoopycongrats.jpg" alt="snoopy_happy_dance">
+  {{/gameOverWin}}
 
-{{#gameOverLose}}
-  <img class="picture" src="../static/images/charliebrownlose.jpg" alt="charlie_brown_lose">
-{{/gameOverLose}}
+  {{#gameOverLose}}
+    <img class="picture" src="../static/images/charliebrownlose.jpg" alt="charlie_brown_lose">
+  {{/gameOverLose}}
 
   <div class="guessSection">
 
@@ -62,29 +62,23 @@
 
     <h2>{{gameOverWin}}</h2>
 
-      <h2>{{gameOverLose}}</h2>
+    <h2>{{gameOverLose}}</h2>
 
-    {{#lengthOfWord}}
-      {{#guessesLeft}}
+    {{^gameOver}}
         <form class="letter" action="/mysteryWord" method="post">
           <input type="text" name="guess" value="">
           <input type="submit" name="button" value="Guess">
         </form>
-      {{/guessesLeft}}
-    {{/lengthOfWord}}
+    {{/gameOver}}
     <!-- only show if game is over -->
   </div>
-  {{#gameOver}}
-    <form class="newWord" action="/playAgain" method="get">
-
-      Play again? <input type="submit" name="button" value="Yes">
-    </form>
-    <span><form class="noNewWord" action="/end" method="post">
-      <input type="submit" name="button" value="No">
-    </form>
+    {{#gameOver}}
+      {{> playAgain}}
     {{/gameOver}}
-  </form>
-</span>
+
+
+
+
 </body>
 
 </html>
