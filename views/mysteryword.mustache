@@ -8,7 +8,11 @@
 </head>
 
 <body>
-  <h1>Welcome to Mystery Word {{name}}!</h1>
+  <h1 class="welcome">Welcome to Mystery Word {{name}}!</h1>
+
+<img class="picture" src="../static/images/snoopysleuth1.jpg" alt="snoopy_detective">
+
+<div class="guessSection">
 
   <!--only shows if there are guesses left  -->
   {{#guessesLeft}}
@@ -25,10 +29,9 @@
 
   <h4>Letters guessed: </h4>
   <ul>
-    <li><span>{{guessedLetters}} </span></li>
+    <li class="guessedLetters"><span>{{guessedLetters}} </span></li>
   </ul>
 
-<!-- FIXME so that it doesn't show if word is guessed -->
 {{#lengthOfWord}}
   {{#guessesLeft}}
     <h4>You have {{guessesLeft}} guesses left, please type a letter below and click on the guess button!</h4>{{/guessesLeft}}
@@ -51,13 +54,14 @@
     <input type="text" name="guess" value="">
     <input type="submit" name="button" value="Guess">
   </form>
-  <!-- should only show if game is over -->
+  <!-- only show if game is over -->
+  </div>
 {{#gameOver}}
   <form class="newWord" action="/playAgain" method="get">
 
     Play again?<input type="submit" name="button" value="Yes">
   </form>
-  <span><form class="" action="/end" method="post">
+  <span><form class="noNewWord" action="/end" method="post">
       <input type="submit" name="button" value="No">
     </form>
     {{/gameOver}}

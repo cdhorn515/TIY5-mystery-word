@@ -1,12 +1,55 @@
+
+/*All*/
 body{
-  background-color: orange;
-  padding-top: 50px;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 150px;
+  text-align: center;
+}
+
+/*mysteryWord page*/
+.welcome{
+  margin-bottom: 50px;
+}
+
+.guessSection{
+  text-align: left;
+  margin-left: 150px;
+}
+.guessedLetters{
+  font-size: 20px;
+}
+h3{
+  font-size: 32px;
+}
+
+h4{
+  font-size: 24px;
 }
 
 li{
   list-style: none;
 }
 
+.picture{
+  float: right;
+  width: 250px;
+  height: 250px;
+  margin-right: 150px;
+}
 .newWord{
+  margin-left: 150px;
+  margin-top: 20px;
   float: left;
+}
+
+.noNewWord{
+  float: left;
+  margin-top: 20px;
+}
+
+/*Login page*/
+.nameInput{
+  width: 250px;
 }

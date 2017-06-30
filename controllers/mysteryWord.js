@@ -36,7 +36,6 @@ module.exports = {
       var errors = req.validationErrors();
       if (!errors) {
         req.session.guess = req.body.guess.toLowerCase();
-        console.log('39', req.session.guess);
         context.guess = req.session.guess;
         //check for duplicate letters
         if (req.session.guessedLetters.length > 0) {

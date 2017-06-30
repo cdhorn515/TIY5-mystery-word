@@ -11,18 +11,6 @@ var loginController = require('./controllers/login');
 
 var app = express();
 
-// var context = {
-//   name: ''
-//   ,guessesLeft: 0
-//   ,secretWord: ''
-//   ,wordBlanks: []
-//   ,lengthOfWord: 0
-//   ,guessedLetters: []
-//   ,wordLetters: ''
-//   ,guess: ''
-//   ,errors: ''
-// };
-
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
@@ -44,27 +32,21 @@ app.use(session({
 app.use(function(req, res, next) {
   var pathname = parseurl(req).pathname;
   if (!req.session.name && pathname != '/login') {
-    console.log('false');
-    console.log('please enter your name');
     res.redirect('login');
   } else {
-    console.log('true');
     next();
   }
 });
 // do we have a random word?
 app.use(function(req, res, next) {
   if (!req.session.word) {
-    console.log('59: no session.word');
     req.session.guessesLeft = 8;
     req.session.guessedLetters = [];
     //***************creating mystery word
     var allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-    console.log('65', allWords.length);
     var words = allWords.filter(function(word){
       return word.length > 3 && word.length < 10;
     });
-    console.log('69', words.length);
     maxRandomNumber = Math.floor(words.length - 1);
     var secretWordIndex = Math.ceil(Math.random() * maxRandomNumber);
     var secretWord = words.splice(secretWordIndex, 1);
