@@ -16,4 +16,4 @@ module.exports = function(app) {
 
   app.post('/end', indexController.goodbyeMsg);
 
-}
+};
