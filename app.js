@@ -38,3 +38,5 @@ router(app);
 app.listen(process.env.PORT ||3000, function(){
   console.log("I'm listening");
 });
+
+module.exports = app;
