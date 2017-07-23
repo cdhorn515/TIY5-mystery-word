@@ -28,21 +28,13 @@ app.use(session({
   saveUninitialized: true
 }));
 /////----------MIDDLEWARE---------
-//do we have a user--
-app.use(function(req, res, next) {
-  var pathname = parseurl(req).pathname;
-  if (!req.session.name && pathname != '/login') {
-    res.redirect('login');
-  } else {
-    next();
-  }
-});
+app.use(middleware.checkPathNameAndSession);
 // do we have a random word?
 app.use(middleware.createWord);
 /////----------ENDPOINTS
 
 router(app);
-
-app.listen(process.env.PORT || 3000, function() {
-  console.log("app launch successful!");
+//
+app.listen(process.env.PORT ||3000, function(){
+  console.log("I'm listening");
 });

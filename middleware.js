@@ -1,12 +1,22 @@
 const fs = require('fs');
+var parseurl = require('parseurl');
 
 module.exports = {
+
+  checkPathNameAndSession: function(req, res, next) {
+    var pathname = parseurl(req).pathname;
+    if (!req.session.name && pathname != '/login') {
+      res.redirect('login');
+    } else {
+      next();
+    }
+  },
 createWord: function(req, res, next) {
   if (!req.session.word) {
     req.session.guessesLeft = 8;
     req.session.guessedLetters = [];
     //***************creating mystery word
-    var allWords = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+    var allWords = fs.readFileSync("./words", "utf-8").toLowerCase().split("\n");
     var words = allWords.filter(function(word){
       return word.length > 3 && word.length < 10;
     });
