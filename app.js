@@ -13,7 +13,7 @@ var app = express();
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', 'views');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
