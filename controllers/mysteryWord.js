@@ -10,7 +10,7 @@ module.exports = {
       guessedLetter: req.session.guess,
 
     };
-    res.render('mysteryWord', context);
+    res.render('mysteryword', context);
   },
   play: function(req, res) {
     var context = {
@@ -25,7 +25,7 @@ module.exports = {
 
     if (req.body.guess === '') {
       context.error = "If you want to play the game, you have to enter a letter";
-      res.render('mysteryWord', context);
+      res.render('mysteryword', context);
       return;
     } else {
       if (req.body.guess) {
@@ -44,7 +44,7 @@ module.exports = {
           for (var i = 0; i < req.session.guessedLetters.length; i++) {
             if (req.session.guessedLetters.includes(req.session.guess)) {
               context.duplicateLetterMessage = "Hey, stop guessing me!!!!!";
-              res.render('mysteryWord', context);
+              res.render('mysteryword', context);
               return;
             }
           }
@@ -65,7 +65,7 @@ module.exports = {
             if (req.session.lengthOfWord === 0) {
               context.gameOverWin = 'Congratulations, you guessed the secret word!';
               context.gameOver = true;
-              res.render('mysteryWord', context);
+              res.render('mysteryword', context);
               return;
             }
           }
@@ -76,7 +76,7 @@ module.exports = {
             context.guessesLeft = 0;
             context.gameOverLose = "Better luck next time!";
             context.gameOver = true;
-            res.render('mysteryWord', context);
+            res.render('mysteryword', context);
             return;
           }
         }
@@ -85,7 +85,7 @@ module.exports = {
         context.errors = errors;
       }
     }
-    res.render('mysteryWord', context);
+    res.render('mysteryword', context);
   },
   replay: function(req, res){
     req.session.word = '';
