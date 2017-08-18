@@ -4,6 +4,7 @@ var indexController = require('./controllers/index');
 
 
 module.exports = function(app) {
+
   app.get('/mysteryWord', mysteryWordController.landing);
 
   app.post('/mysteryWord', mysteryWordController.play);
@@ -15,5 +16,7 @@ module.exports = function(app) {
   app.get('/playAgain', mysteryWordController.replay);
 
   app.post('/end', indexController.goodbyeMsg);
+
+  app.get('/', indexController.indexLanding);
 
 };

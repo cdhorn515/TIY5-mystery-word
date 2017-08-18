@@ -6,6 +6,10 @@ goodbyeMsg: function(req,res){
     endGame: 'Thanks  for playing ' + req.session.name + '! Hope you\'ll come back and play again soon!'
     };
     res.render('index', context);
+  },
+
+  indexLanding: function(req, res) {
+    res.redirect('/login');
   }
 
 };
