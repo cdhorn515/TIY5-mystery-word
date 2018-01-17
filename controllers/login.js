@@ -15,6 +15,7 @@ checkForName: function(req, res) {
 
   if(!req.body.name){
     console.log('line 102: please enter your name');
+    res.redirect('/login');
 }
   if(errors){
      context = {
