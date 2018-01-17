@@ -1,5 +1,4 @@
-# Mystery-Word Game (Hangman) :abc: c _ d _ n g
-
+# Mystery-Word Game (Hangman) :abc: c _ d _ n g :question:
 
 I built a Node.js Express application that uses Sessions to persist data from one page to the next. This was the first major backend project I created and I'm pretty happy with how it turned out, hope you enjoy!
 
@@ -7,7 +6,7 @@ This project is deployed on Heroku [here](https://thawing-thicket-28274.herokuap
 
 ### Built with
 * Node.js (version 8)
-* Express 
+* Express
 * Mustache template
 
 ### To run locally:
@@ -27,4 +26,4 @@ This project is deployed on Heroku [here](https://thawing-thicket-28274.herokuap
   brew install node@8
   ```
 * Once you have Node installed type `npm install` which will download all of the dependencies required for this application
-* Now type `node app.js`, then point a browser window to `localhost:3000`, and enjoy! (and prepare to learn some new words) :grinning: :laughing:
+* Now type `node app.js`, then point a browser window to `localhost:3000`, and enjoy! (and prepare to learn some new words) :grinning: :laughing: :grinning:
