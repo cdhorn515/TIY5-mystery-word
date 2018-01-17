@@ -8,15 +8,10 @@
   <body>
     <h1>Please enter your name below and click submit to start playing!</h1>
 
-    <ul>
-     {{#errors}}
-       <li>{{msg}}</li>
-     {{/errors}}
-    </ul>
-
     <form class="" action="/login" method="post">
       <input class="nameInput" type="text" name="name" value="" placeholder="First Name">
         <input type="submit" name="submit" value="Enter">
     </form>
+
   </body>
 </html>

@@ -9,22 +9,23 @@ req.session.word = '';
 },
 
 checkForName: function(req, res) {
-  req.checkBody('name', 'Please enter your name').notEmpty();
-  var errors = req.validationErrors();
-  var context = {};
+  // req.checkBody('name', 'Please enter your name').notEmpty();
+  // var errors = req.validationErrors();
+  // var context = {};
 
   if(!req.body.name){
     console.log('line 102: please enter your name');
     res.redirect('/login');
-}
-  if(errors){
-     context = {
-      errors: errors
-    };
-    res.render('login', context);
+// }
+//   if(errors){
+//      context = {
+//       msg: 'please enter your name'
+//     };
+//     res.render('login', context);
   } else if (req.body.name){
   req.session.name = req.body.name;
-}
-  res.redirect('mysteryWord');
+
+  res.redirect('/mysteryWord');
+  }
 }
 };
