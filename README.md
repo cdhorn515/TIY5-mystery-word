@@ -27,7 +27,7 @@ This project is deployed on Heroku [here](https://thawing-thicket-28274.herokuap
   ```
   brew install node@8
   ```
-* Once you have Node.js installed type `npm install` which will download all of the dependencies required for this application
+* Once you have Node.js installed type `npm install` which will download and install the dependencies required for this application
 * Now type `node app.js`, then point a browser window to `localhost:3000`, and enjoy! (and prepare to learn some new words) :grinning: :laughing: :grinning:
 
 
