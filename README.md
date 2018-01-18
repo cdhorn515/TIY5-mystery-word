@@ -1,4 +1,6 @@
-# Mystery-Word Game (Hangman)  c _ d _ n g  :abc::question:
+# Mystery-Word Game (Hangman) :star2:
+
+c _ d _ n g  :abc::question:
 
 I built a Node.js Express application that uses Sessions to persist data from one page to the next. This was the first major backend project I created and I'm pretty happy with how it turned out, hope you enjoy!
 
